@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ژامبیست | لیست قیمت محصولات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#0b0705;
+    --bg-ember:#160d08;
+    --card:#1c120c;
+    --line:#3a2317;
+    --gold:#e0a83e;
+    --gold-bright:#f4c563;
+    --flame:#e5642a;
+    --flame-deep:#b6371a;
+    --cream:#f3e7d4;
+    --cream-dim:#c9b8a0;
+    --smoke:#8a7360;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 90% 50% at 50% 0%, rgba(180,60,20,0.16), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 15% 85%, rgba(224,168,62,0.08), transparent 60%),
+      var(--bg-void);
+    color:var(--cream);
+    font-family:'Vazirmatn', sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:64px 20px 40px;
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .ember-glow{
+    position:absolute;
+    top:-120px; left:50%;
+    transform:translateX(-50%);
+    width:520px; height:420px;
+    background:radial-gradient(circle, rgba(229,100,42,0.35) 0%, rgba(229,100,42,0.08) 45%, transparent 70%);
+    filter:blur(10px);
+    animation:flicker 5s ease-in-out infinite;
+    pointer-events:none;
+  }
+
+  @keyframes flicker{
+    0%,100%{opacity:1; transform:translateX(-50%) scale(1);}
+    50%{opacity:0.82; transform:translateX(-50%) scale(1.04);}
+  }
+
+  .flame-mark{
+    width:64px; height:64px;
+    margin:0 auto 18px;
+    position:relative;
+    z-index:2;
+  }
+
+  .flame-mark svg{width:100%;height:100%;filter:drop-shadow(0 0 14px rgba(229,100,42,0.6));}
+
+  .brand{
+    font-family:'Lalezar', sans-serif;
+    font-size:clamp(2.4rem, 9vw, 4rem);
+    letter-spacing:2px;
+    background:linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 55%, var(--flame-deep) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    position:relative;
+    z-index:2;
+    line-height:1.1;
+  }
+
+  .brand-sub{
+    font-size:0.72rem;
+    letter-spacing:6px;
+    color:var(--smoke);
+    margin-top:6px;
+    position:relative;
+    z-index:2;
+  }
+
+  .hero-line{
+    margin-top:26px;
+    font-size:1.05rem;
+    color:var(--cream-dim);
+    line-height:1.9;
+    max-width:480px;
+    margin-inline:auto;
+    position:relative;
+    z-index:2;
+  }
+
+  .hero-note{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:18px;
+    padding:8px 18px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:0.8rem;
+    color:var(--gold);
+    background:rgba(224,168,62,0.06);
+    position:relative;
+    z-index:2;
+  }
+
+  /* ---------- Category sections ---------- */
+  .menu{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 18px 40px;
+  }
+
+  .category{
+    margin-bottom:36px;
+  }
+
+  .cat-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+
+  .cat-icon{
+    width:38px; height:38px;
+    flex:none;
+    border-radius:10px;
+    background:linear-gradient(155deg, rgba(229,100,42,0.18), rgba(224,168,62,0.06));
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.15rem;
+  }
+
+  .cat-title{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.35rem;
+    letter-spacing:0.5px;
+    color:var(--gold-bright);
+  }
+
+  .cat-rule{
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), transparent);
+  }
+
+  .items{
+    background:linear-gradient(155deg, var(--card), #150d08);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+  }
+
+  .item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    transition:background 0.25s ease;
+  }
+
+  .item:last-child{border-bottom:none;}
+
+  .item:hover{background:rgba(229,100,42,0.06);}
+
+  .item-name{
+    font-size:0.98rem;
+    font-weight:600;
+    color:var(--cream);
+  }
+
+  .item-tag{
+    display:block;
+    font-size:0.72rem;
+    color:var(--smoke);
+    font-weight:400;
+    margin-top:3px;
+  }
+
+  .item-price{
+    font-weight:800;
+    font-size:1.05rem;
+    color:var(--gold-bright);
+    white-space:nowrap;
+    display:flex;
+    align-items:baseline;
+    gap:4px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .item-price small{
+    font-size:0.62rem;
+    font-weight:500;
+    color:var(--smoke);
+  }
+
+  .unit-note{
+    text-align:center;
+    font-size:0.78rem;
+    color:var(--smoke);
+    margin:-6px 0 30px;
+  }
+
+  /* ---------- CTA footer ---------- */
+  .cta{
+    max-width:640px;
+    margin:10px auto 60px;
+    padding:0 18px;
+  }
+
+  .cta-box{
+    text-align:center;
+    padding:34px 24px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:radial-gradient(ellipse at 50% 0%, rgba(229,100,42,0.14), transparent 70%), var(--card);
+    position:relative;
+  }
+
+  .cta-title{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.6rem;
+    color:var(--gold-bright);
+    margin-bottom:10px;
+  }
+
+  .cta-text{
+    color:var(--cream-dim);
+    font-size:0.95rem;
+    line-height:1.8;
+    margin-bottom:20px;
+  }
+
+  .cta-button{
+    display:inline-block;
+    padding:14px 38px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--flame), var(--flame-deep));
+    color:#fff;
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    box-shadow:0 8px 24px rgba(182,55,26,0.35);
+    transition:transform 0.2s ease;
+    border:none;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+  }
+
+  .cta-button:hover{transform:translateY(-2px);}
+
+  /* ---------- Contact bottom sheet ---------- */
+  .sheet-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(6,3,2,0.7);
+    backdrop-filter:blur(2px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease;
+    z-index:50;
+  }
+
+  .sheet-overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .sheet{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:linear-gradient(165deg, var(--card), #130b06);
+    border-top:1px solid var(--line);
+    border-radius:24px 24px 0 0;
+    padding:10px 20px 30px;
+    transform:translateY(100%);
+    transition:transform 0.3s ease;
+    z-index:51;
+    max-width:640px;
+    margin:0 auto;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.5);
+  }
+
+  .sheet.open{transform:translateY(0);}
+
+  .sheet-handle{
+    width:40px; height:4px;
+    background:var(--line);
+    border-radius:999px;
+    margin:10px auto 18px;
+  }
+
+  .sheet-title{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.3rem;
+    color:var(--gold-bright);
+    text-align:center;
+    margin-bottom:6px;
+  }
+
+  .sheet-sub{
+    text-align:center;
+    font-size:0.85rem;
+    color:var(--cream-dim);
+    margin-bottom:20px;
+  }
+
+  .contact-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:12px;
+    text-decoration:none;
+    background:rgba(224,168,62,0.04);
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+
+  .contact-row:hover{
+    background:rgba(224,168,62,0.1);
+    transform:translateY(-1px);
+  }
+
+  .contact-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:0.92rem;
+    color:var(--cream);
+    font-weight:600;
+  }
+
+  .contact-badge{
+    width:30px; height:30px;
+    border-radius:9px;
+    background:linear-gradient(155deg, rgba(229,100,42,0.25), rgba(224,168,62,0.08));
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.85rem;
+    color:var(--gold-bright);
+    flex:none;
+  }
+
+  .contact-handle{
+    font-size:0.9rem;
+    color:var(--gold-bright);
+    font-weight:700;
+    direction:ltr;
+  }
+
+  .sheet-close{
+    display:block;
+    margin:6px auto 0;
+    background:none;
+    border:none;
+    color:var(--smoke);
+    font-size:0.85rem;
+    padding:10px;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+  }
+
+  .channel-link-wrap{
+    text-align:center;
+    margin:16px 0 0;
+  }
+
+  .channel-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 38px;
+    border-radius:999px;
+    background:linear-gradient(135deg, rgba(224,168,62,0.18), rgba(224,168,62,0.05));
+    border:1px solid var(--gold);
+    color:var(--gold-bright);
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+
+  .channel-link:hover{
+    transform:translateY(-2px);
+    background:linear-gradient(135deg, rgba(224,168,62,0.28), rgba(224,168,62,0.1));
+  }
+
+  footer{
+    text-align:center;
+    padding:24px 20px 40px;
+    color:var(--smoke);
+    font-size:0.75rem;
+    letter-spacing:1px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ember-glow{animation:none;}
+  }
+
+  @media (max-width:420px){
+    .item-name{font-size:0.9rem;}
+    .item-price{font-size:0.95rem;}
+    .cat-title{font-size:1.15rem;}
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="ember-glow"></div>
+    <div class="flame-mark">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 4C32 4 20 18 20 30C20 38 25 44 32 44C39 44 44 38 44 30C44 22 38 18 38 14C38 20 34 22 32 26C30 22 28 18 32 4Z" fill="url(#g1)"/>
+        <defs>
+          <linearGradient id="g1" x1="32" y1="4" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f4c563"/>
+            <stop offset="0.55" stop-color="#e5642a"/>
+            <stop offset="1" stop-color="#b6371a"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h1 class="brand">ZHAMBIST</h1>
+    <div class="brand-sub">PREMIUM PRODUCTS</div>
+    <p class="hero-line">لیست قیمت محصولات سالم و لذیذ ژامبیست، تازه و با کیفیت، برای سفره‌ی شما 🌿</p>
+    <div class="hero-note">⚖️ قیمت‌ها برای نیم کیلو محاسبه شده است</div>
+  </section>
+
+  <main class="menu">
+
+    <div class="category">
+      <div class="cat-head">
+        <div class="cat-icon">🥩</div>
+        <div class="cat-title">محصولات گوشتی</div>
+        <div class="cat-rule"></div>
+      </div>
+      <div class="items">
+        <div class="item">
+          <span class="item-name">ژامبون گوشت درجه یک</span>
+          <span class="item-price">۸۱۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">لبرکزه اتریشی خاص</span>
+          <span class="item-price">۸۳۰<small>تومان</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-head">
+        <div class="cat-icon">🍗</div>
+        <div class="cat-title">مرغ و بوقلمون</div>
+        <div class="cat-rule"></div>
+      </div>
+      <div class="items">
+        <div class="item">
+          <span class="item-name">ژامبون مرغ و قارچ</span>
+          <span class="item-price">۴۲۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">ژامبون بوقلمون و قارچ</span>
+          <span class="item-price">۵۲۰<small>تومان</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-head">
+        <div class="cat-icon">🌭</div>
+        <div class="cat-title">سوسیس و هات‌داگ</div>
+        <div class="cat-rule"></div>
+      </div>
+      <div class="items">
+        <div class="item">
+          <span class="item-name">سوسیس کوکتل</span>
+          <span class="item-price">۴۲۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">کوکتل با پنیر</span>
+          <span class="item-price">۴۸۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">سوسیس لیونر</span>
+          <span class="item-price">۳۸۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">هات‌داگ / فرانکفورتر</span>
+          <span class="item-price">۴۲۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">هات‌داگ با پنیر</span>
+          <span class="item-price">۴۸۰<small>تومان</small></span>
+        </div>
+        <div class="item">
+          <span class="item-name">سوسیس مخصوص کودک
+            <span class="item-tag">با سویق</span>
+          </span>
+          <span class="item-price">۴۷۰<small>تومان</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-head">
+        <div class="cat-icon">🔥</div>
+        <div class="cat-title">سایر خوشمزه‌ها</div>
+        <div class="cat-rule"></div>
+      </div>
+      <div class="items">
+        <div class="item">
+          <span class="item-name">ناگت مرغ و پنیر</span>
+          <span class="item-price">۳۵۰<small>تومان</small></span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div class="cta">
+    <div class="cta-box">
+      <div class="cta-title">آماده‌ی ثبت سفارشید؟</div>
+      <p class="cta-text">برای ثبت سفارش و نوش‌جان کردن محصولات سالم ژامبیست، پیام بدید تا در سریع‌ترین زمان همراهیتون کنیم ❤️</p>
+      <button type="button" class="cta-button" onclick="openContactSheet()">ثبت سفارش 📥</button>
+    </div>
+  </div>
+
+  <div class="channel-link-wrap">
+    <a href="https://eitaa.com/zhambist" class="channel-link">📣 عضویت در کانال ژامبیست</a>
+  </div>
+
+  <footer>ZHAMBIST · PREMIUM PRODUCTS</footer>
+
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeContactSheet()"></div>
+  <div class="sheet" id="contactSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">راه‌های ارتباطی</div>
+    <p class="sheet-sub">برای ثبت سفارش، از یکی از راه‌های زیر پیام بدید 👇</p>
+
+    <a href="https://eitaa.com/Farahnaz_arabikhan" class="contact-row" target="_blank" rel="noopener">
+      <span class="contact-label">
+        <span class="contact-badge">۱</span>
+        راه ارتباطی اول
+      </span>
+      <span class="contact-handle">@Farahnaz_arabikhan</span>
+    </a>
+
+    <a href="https://eitaa.com/Seyyed_Salleh" class="contact-row" target="_blank" rel="noopener">
+      <span class="contact-label">
+        <span class="contact-badge">۲</span>
+        راه ارتباطی دوم
+      </span>
+      <span class="contact-handle">@Seyyed_Salleh</span>
+    </a>
+
+    <button type="button" class="sheet-close" onclick="closeContactSheet()">بستن ✕</button>
+  </div>
+
+  <script>
+    function openContactSheet(){
+      document.getElementById('sheetOverlay').classList.add('open');
+      document.getElementById('contactSheet').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeContactSheet(){
+      document.getElementById('sheetOverlay').classList.remove('open');
+      document.getElementById('contactSheet').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  </script>
+
+</body>
+</html>
