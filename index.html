@@ -20,6 +20,8 @@
     --cream:#f3e7d4;
     --cream-dim:#c9b8a0;
     --smoke:#8a7360;
+    --good:#5fb87a;
+    --bad:#d8583f;
   }
 
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -181,6 +183,8 @@
 
   .item:hover{background:rgba(229,100,42,0.06);}
 
+  .item-main{flex:1; min-width:0;}
+
   .item-name{
     font-size:0.98rem;
     font-weight:600;
@@ -193,6 +197,14 @@
     color:var(--smoke);
     font-weight:400;
     margin-top:3px;
+  }
+
+  .item-side{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+    flex:none;
   }
 
   .item-price{
@@ -210,6 +222,65 @@
     font-size:0.62rem;
     font-weight:500;
     color:var(--smoke);
+  }
+
+  .qty-box{display:flex; align-items:center; justify-content:flex-end;}
+
+  .add-btn{
+    width:34px; height:34px;
+    border-radius:10px;
+    border:1px solid var(--gold);
+    background:rgba(224,168,62,0.08);
+    color:var(--gold-bright);
+    font-size:1.2rem;
+    font-weight:700;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background 0.2s ease, transform 0.15s ease;
+    font-family:'Vazirmatn', sans-serif;
+  }
+
+  .add-btn:hover{background:rgba(224,168,62,0.18); transform:translateY(-1px);}
+
+  .stepper{
+    display:flex;
+    align-items:center;
+    gap:0;
+    border:1px solid var(--gold);
+    border-radius:10px;
+    overflow:hidden;
+    background:rgba(224,168,62,0.06);
+  }
+
+  .stepper button{
+    width:30px; height:32px;
+    border:none;
+    background:transparent;
+    color:var(--gold-bright);
+    font-size:1.05rem;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+  }
+
+  .stepper button:hover{background:rgba(224,168,62,0.15);}
+
+  .stepper-val{
+    min-width:64px;
+    text-align:center;
+    font-size:0.82rem;
+    font-weight:700;
+    color:var(--cream);
+    display:flex;
+    flex-direction:column;
+    line-height:1.15;
+    padding:0 4px;
+  }
+
+  .stepper-val small{
+    font-size:0.6rem;
+    color:var(--smoke);
+    font-weight:500;
   }
 
   .unit-note{
@@ -297,6 +368,8 @@
     max-width:640px;
     margin:0 auto;
     box-shadow:0 -10px 40px rgba(0,0,0,0.5);
+    max-height:88vh;
+    overflow-y:auto;
   }
 
   .sheet.open{transform:translateY(0);}
@@ -408,10 +481,268 @@
 
   footer{
     text-align:center;
-    padding:24px 20px 40px;
+    padding:24px 20px 100px;
     color:var(--smoke);
     font-size:0.75rem;
     letter-spacing:1px;
+  }
+
+  /* ---------- Floating cart bar ---------- */
+  .cart-bar{
+    position:fixed;
+    left:16px; right:16px; bottom:16px;
+    max-width:608px;
+    margin:0 auto;
+    background:linear-gradient(135deg, var(--flame), var(--flame-deep));
+    border-radius:18px;
+    padding:14px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    cursor:pointer;
+    z-index:40;
+    transform:translateY(140%);
+    transition:transform 0.3s ease;
+  }
+
+  .cart-bar.show{transform:translateY(0);}
+
+  .cart-bar-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#fff;
+    font-weight:700;
+    font-size:0.92rem;
+  }
+
+  .cart-bar-count{
+    background:rgba(255,255,255,0.25);
+    border-radius:999px;
+    width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.8rem;
+  }
+
+  .cart-bar-total{
+    color:#fff;
+    font-weight:800;
+    font-size:0.98rem;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  /* ---------- Cart sheet ---------- */
+  .cart-list{margin-bottom:18px;}
+
+  .cart-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:14px 4px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .cart-row:last-child{border-bottom:none;}
+
+  .cart-row-name{
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--cream);
+    margin-bottom:4px;
+  }
+
+  .cart-row-sub{
+    font-size:0.75rem;
+    color:var(--smoke);
+  }
+
+  .cart-row-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+  }
+
+  .cart-row-price{
+    font-weight:800;
+    color:var(--gold-bright);
+    font-size:0.92rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cart-remove{
+    background:none;
+    border:none;
+    color:var(--bad);
+    font-size:0.72rem;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+    text-decoration:underline;
+  }
+
+  .cart-empty{
+    text-align:center;
+    color:var(--smoke);
+    padding:30px 10px;
+    font-size:0.9rem;
+  }
+
+  .cart-total-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 4px;
+    border-top:1px solid var(--line);
+    margin-top:6px;
+  }
+
+  .cart-total-label{
+    font-size:0.95rem;
+    color:var(--cream-dim);
+    font-weight:600;
+  }
+
+  .cart-total-val{
+    font-size:1.15rem;
+    font-weight:800;
+    color:var(--gold-bright);
+  }
+
+  .primary-btn{
+    display:block;
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:none;
+    background:linear-gradient(135deg, var(--flame), var(--flame-deep));
+    color:#fff;
+    font-weight:700;
+    font-size:0.98rem;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+    margin-top:8px;
+    transition:opacity 0.2s ease, transform 0.15s ease;
+  }
+
+  .primary-btn:disabled{opacity:0.55; cursor:not-allowed;}
+  .primary-btn:not(:disabled):hover{transform:translateY(-1px);}
+
+  .ghost-btn{
+    display:block;
+    width:100%;
+    padding:13px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--cream-dim);
+    font-weight:600;
+    font-size:0.88rem;
+    cursor:pointer;
+    font-family:'Vazirmatn', sans-serif;
+    margin-top:10px;
+  }
+
+  /* ---------- Checkout form ---------- */
+  .field{margin-bottom:16px;}
+
+  .field label{
+    display:block;
+    font-size:0.82rem;
+    color:var(--cream-dim);
+    margin-bottom:8px;
+    font-weight:600;
+  }
+
+  .field input{
+    width:100%;
+    padding:14px 16px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--cream);
+    font-size:0.95rem;
+    font-family:'Vazirmatn', sans-serif;
+    outline:none;
+    transition:border-color 0.2s ease;
+  }
+
+  .field input:focus{border-color:var(--gold);}
+  .field input::placeholder{color:var(--smoke);}
+
+  .field-error{
+    font-size:0.72rem;
+    color:var(--bad);
+    margin-top:6px;
+    display:none;
+  }
+
+  .field.invalid input{border-color:var(--bad);}
+  .field.invalid .field-error{display:block;}
+
+  .checkout-summary{
+    background:rgba(224,168,62,0.05);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:18px;
+    font-size:0.85rem;
+    color:var(--cream-dim);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .toast{
+    position:fixed;
+    top:20px; left:50%;
+    transform:translateX(-50%) translateY(-20px);
+    background:var(--bad);
+    color:#fff;
+    padding:12px 22px;
+    border-radius:12px;
+    font-size:0.85rem;
+    font-weight:600;
+    z-index:80;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* ---------- Success sheet ---------- */
+  .success-wrap{
+    text-align:center;
+    padding:20px 10px 10px;
+  }
+
+  .success-icon{
+    width:64px;height:64px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:rgba(95,184,122,0.15);
+    border:1px solid var(--good);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.8rem;
+  }
+
+  .success-title{
+    font-family:'Lalezar', sans-serif;
+    font-size:1.4rem;
+    color:var(--gold-bright);
+    margin-bottom:10px;
+  }
+
+  .success-text{
+    color:var(--cream-dim);
+    font-size:0.9rem;
+    line-height:1.8;
+    margin-bottom:20px;
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -426,6 +757,8 @@
 </style>
 </head>
 <body>
+
+  <div class="toast" id="toast"></div>
 
   <section class="hero">
     <div class="ember-glow"></div>
@@ -456,13 +789,19 @@
         <div class="cat-rule"></div>
       </div>
       <div class="items">
-        <div class="item">
-          <span class="item-name">ژامبون گوشت</span>
-          <span class="item-price">۸۳۰<small>تومان</small></span>
+        <div class="item" data-name="ژامبون گوشت" data-price="830">
+          <div class="item-main"><span class="item-name">ژامبون گوشت</span></div>
+          <div class="item-side">
+            <span class="item-price">۸۳۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">لبرکزه اتریشی</span>
-          <span class="item-price">۸۳۰<small>تومان</small></span>
+        <div class="item" data-name="لبرکزه اتریشی" data-price="830">
+          <div class="item-main"><span class="item-name">لبرکزه اتریشی</span></div>
+          <div class="item-side">
+            <span class="item-price">۸۳۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
       </div>
     </div>
@@ -474,17 +813,26 @@
         <div class="cat-rule"></div>
       </div>
       <div class="items">
-        <div class="item">
-          <span class="item-name">ژامبون مرغ و قارچ</span>
-          <span class="item-price">۴۸۰<small>تومان</small></span>
+        <div class="item" data-name="ژامبون مرغ و قارچ" data-price="480">
+          <div class="item-main"><span class="item-name">ژامبون مرغ و قارچ</span></div>
+          <div class="item-side">
+            <span class="item-price">۴۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">ژامبون بوقلمون و قارچ</span>
-          <span class="item-price">۵۸۰<small>تومان</small></span>
+        <div class="item" data-name="ژامبون بوقلمون و قارچ" data-price="580">
+          <div class="item-main"><span class="item-name">ژامبون بوقلمون و قارچ</span></div>
+          <div class="item-side">
+            <span class="item-price">۵۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">پپرونی</span>
-          <span class="item-price">۵۸۰<small>تومان</small></span>
+        <div class="item" data-name="پپرونی" data-price="580">
+          <div class="item-main"><span class="item-name">پپرونی</span></div>
+          <div class="item-side">
+            <span class="item-price">۵۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
       </div>
     </div>
@@ -496,31 +844,51 @@
         <div class="cat-rule"></div>
       </div>
       <div class="items">
-        <div class="item">
-          <span class="item-name">سوسیس کوکتل</span>
-          <span class="item-price">۴۵۰<small>تومان</small></span>
+        <div class="item" data-name="سوسیس کوکتل" data-price="450">
+          <div class="item-main"><span class="item-name">سوسیس کوکتل</span></div>
+          <div class="item-side">
+            <span class="item-price">۴۵۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">کوکتل با پنیر</span>
-          <span class="item-price">۴۸۰<small>تومان</small></span>
+        <div class="item" data-name="کوکتل با پنیر" data-price="480">
+          <div class="item-main"><span class="item-name">کوکتل با پنیر</span></div>
+          <div class="item-side">
+            <span class="item-price">۴۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">سوسیس لیونر</span>
-          <span class="item-price">۳۸۰<small>تومان</small></span>
+        <div class="item" data-name="سوسیس لیونر" data-price="380">
+          <div class="item-main"><span class="item-name">سوسیس لیونر</span></div>
+          <div class="item-side">
+            <span class="item-price">۳۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">هات‌داگ / فرانکفورتر</span>
-          <span class="item-price">۴۵۰<small>تومان</small></span>
+        <div class="item" data-name="هات‌داگ / فرانکفورتر" data-price="450">
+          <div class="item-main"><span class="item-name">هات‌داگ / فرانکفورتر</span></div>
+          <div class="item-side">
+            <span class="item-price">۴۵۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">هات‌داگ با پنیر</span>
-          <span class="item-price">۴۸۰<small>تومان</small></span>
+        <div class="item" data-name="هات‌داگ با پنیر" data-price="480">
+          <div class="item-main"><span class="item-name">هات‌داگ با پنیر</span></div>
+          <div class="item-side">
+            <span class="item-price">۴۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
-        <div class="item">
-          <span class="item-name">سوسیس مخصوص کودک
-            <span class="item-tag">با سویق</span>
-          </span>
-          <span class="item-price">۴۷۰<small>تومان</small></span>
+        <div class="item" data-name="سوسیس مخصوص کودک" data-price="470">
+          <div class="item-main">
+            <span class="item-name">سوسیس مخصوص کودک
+              <span class="item-tag">با سویق</span>
+            </span>
+          </div>
+          <div class="item-side">
+            <span class="item-price">۴۷۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
       </div>
     </div>
@@ -532,9 +900,12 @@
         <div class="cat-rule"></div>
       </div>
       <div class="items">
-        <div class="item">
-          <span class="item-name">ناگت مرغ و پنیر</span>
-          <span class="item-price">۳۸۰<small>تومان</small></span>
+        <div class="item" data-name="ناگت مرغ و پنیر" data-price="380">
+          <div class="item-main"><span class="item-name">ناگت مرغ و پنیر</span></div>
+          <div class="item-side">
+            <span class="item-price">۳۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
         </div>
       </div>
     </div>
@@ -544,8 +915,8 @@
   <div class="cta">
     <div class="cta-box">
       <div class="cta-title">آماده‌ی ثبت سفارشید؟</div>
-      <p class="cta-text">برای ثبت سفارش و نوش‌جان کردن محصولات سالم ژامبیست، پیام بدید تا در سریع‌ترین زمان همراهیتون کنیم ❤️</p>
-      <button type="button" class="cta-button" onclick="openContactSheet()">ثبت سفارش 📥</button>
+      <p class="cta-text">محصولات مورد نظرتون رو با زدن دکمه‌ی + به سبد خرید اضافه کنید و سفارشتون رو مستقیم برامون ثبت کنید ❤️</p>
+      <button type="button" class="cta-button" onclick="openContactSheet()">راه‌های ارتباطی دیگر 📥</button>
     </div>
   </div>
 
@@ -555,6 +926,16 @@
 
   <footer>ZHAMBIST · PREMIUM PRODUCTS</footer>
 
+  <!-- Floating cart bar -->
+  <div class="cart-bar" id="cartBar" onclick="openCartSheet()">
+    <div class="cart-bar-info">
+      <span class="cart-bar-count" id="cartBarCount">0</span>
+      <span>مشاهده سبد خرید</span>
+    </div>
+    <div class="cart-bar-total" id="cartBarTotal">۰ تومان</div>
+  </div>
+
+  <!-- Contact sheet -->
   <div class="sheet-overlay" id="sheetOverlay" onclick="closeContactSheet()"></div>
   <div class="sheet" id="contactSheet">
     <div class="sheet-handle"></div>
@@ -580,7 +961,66 @@
     <button type="button" class="sheet-close" onclick="closeContactSheet()">بستن ✕</button>
   </div>
 
+  <!-- Cart sheet -->
+  <div class="sheet-overlay" id="cartOverlay" onclick="closeCartSheet()"></div>
+  <div class="sheet" id="cartSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">سبد خرید شما</div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-total-row">
+      <span class="cart-total-label">جمع کل</span>
+      <span class="cart-total-val" id="cartTotalVal">۰ تومان</span>
+    </div>
+    <button type="button" class="primary-btn" id="goCheckoutBtn" onclick="openCheckoutSheet()">تکمیل سفارش ←</button>
+    <button type="button" class="sheet-close" onclick="closeCartSheet()">بستن ✕</button>
+  </div>
+
+  <!-- Checkout sheet -->
+  <div class="sheet-overlay" id="checkoutOverlay" onclick="closeCheckoutSheet()"></div>
+  <div class="sheet" id="checkoutSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">تکمیل سفارش</div>
+    <p class="sheet-sub">اطلاعاتتون رو وارد کنید تا سفارش براتون ثبت بشه</p>
+
+    <div class="checkout-summary">
+      <span>مبلغ قابل پرداخت</span>
+      <strong id="checkoutTotalVal">۰ تومان</strong>
+    </div>
+
+    <div class="field" id="nameField">
+      <label>نام و نام خانوادگی</label>
+      <input type="text" id="customerName" placeholder="مثلاً: علی محمدی">
+      <div class="field-error">لطفاً نام و نام خانوادگی رو وارد کنید</div>
+    </div>
+
+    <div class="field" id="phoneField">
+      <label>شماره موبایل</label>
+      <input type="tel" id="customerPhone" placeholder="09xxxxxxxxx" maxlength="11" inputmode="numeric">
+      <div class="field-error">شماره موبایل معتبر نیست (مثال: 09123456789)</div>
+    </div>
+
+    <button type="button" class="primary-btn" id="submitOrderBtn" onclick="submitOrder()">ثبت نهایی سفارش 📮</button>
+    <button type="button" class="ghost-btn" onclick="closeCheckoutSheet()">بازگشت به سبد خرید</button>
+  </div>
+
+  <!-- Success sheet -->
+  <div class="sheet-overlay" id="successOverlay" onclick="closeSuccessSheet()"></div>
+  <div class="sheet" id="successSheet">
+    <div class="sheet-handle"></div>
+    <div class="success-wrap">
+      <div class="success-icon">✅</div>
+      <div class="success-title">سفارش شما ثبت شد!</div>
+      <p class="success-text">سفارشتون برای ما ارسال شد. به‌زودی برای هماهنگی ارسال باهاتون تماس می‌گیریم 🌿</p>
+      <button type="button" class="primary-btn" onclick="closeSuccessSheet()">متوجه شدم</button>
+    </div>
+  </div>
+
   <script>
+    /* ---------------- Telegram config ---------------- */
+    var TELEGRAM_BOT_TOKEN = "8852089779:AAGvHVgtVpNbFLhziAiw5Qm1_16Bv1wRqzQ";
+    var TELEGRAM_CHAT_ID = "44039489";
+
+    /* ---------------- Contact sheet ---------------- */
     function openContactSheet(){
       document.getElementById('sheetOverlay').classList.add('open');
       document.getElementById('contactSheet').classList.add('open');
@@ -590,6 +1030,276 @@
       document.getElementById('sheetOverlay').classList.remove('open');
       document.getElementById('contactSheet').classList.remove('open');
       document.body.style.overflow = '';
+    }
+
+    /* ---------------- Cart state ---------------- */
+    var cart = {}; // id -> {name, price, qty}
+    var persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+
+    function toPersianNumber(num){
+      return String(num).replace(/[0-9]/g, function(d){ return persianDigits[d]; });
+    }
+
+    function formatToman(num){
+      var withCommas = Number(num).toLocaleString('en-US');
+      return toPersianNumber(withCommas) + ' تومان';
+    }
+
+    function weightLabel(qty){
+      var kg = qty * 0.5;
+      var kgStr = (kg % 1 === 0) ? kg.toString() : kg.toString();
+      return toPersianNumber(kgStr) + ' کیلوگرم';
+    }
+
+    // Assign unique ids to items on load
+    document.addEventListener('DOMContentLoaded', function(){
+      var items = document.querySelectorAll('.item[data-price]');
+      items.forEach(function(el, idx){
+        el.dataset.id = 'p' + idx;
+      });
+    });
+
+    function addItem(btn){
+      var itemEl = btn.closest('.item');
+      var id = itemEl.dataset.id;
+      var name = itemEl.dataset.name;
+      var price = parseInt(itemEl.dataset.price, 10);
+
+      cart[id] = { name: name, price: price, qty: 1 };
+      renderItemControl(itemEl);
+      renderCartBar();
+    }
+
+    function incItemQty(id){
+      if(!cart[id]) return;
+      cart[id].qty += 1;
+      var itemEl = document.querySelector('.item[data-id="' + id + '"]');
+      if(itemEl) renderItemControl(itemEl);
+      renderCartBar();
+      renderCartList();
+    }
+
+    function decItemQty(id){
+      if(!cart[id]) return;
+      cart[id].qty -= 1;
+      if(cart[id].qty <= 0){
+        delete cart[id];
+      }
+      var itemEl = document.querySelector('.item[data-id="' + id + '"]');
+      if(itemEl) renderItemControl(itemEl);
+      renderCartBar();
+      renderCartList();
+    }
+
+    function renderItemControl(itemEl){
+      var id = itemEl.dataset.id;
+      var box = itemEl.querySelector('.qty-box');
+      if(cart[id]){
+        var qty = cart[id].qty;
+        box.innerHTML =
+          '<div class="stepper">' +
+            '<button onclick="decItemQty(\'' + id + '\')">−</button>' +
+            '<span class="stepper-val">' + toPersianNumber(qty) + ' <small>× نیم کیلو</small></span>' +
+            '<button onclick="incItemQty(\'' + id + '\')">+</button>' +
+          '</div>';
+      } else {
+        box.innerHTML = '<button class="add-btn" onclick="addItem(this)">+</button>';
+      }
+    }
+
+    function cartCount(){
+      var n = 0;
+      for(var id in cart){ n += cart[id].qty; }
+      return n;
+    }
+
+    function cartTotal(){
+      var total = 0;
+      for(var id in cart){ total += cart[id].qty * cart[id].price; }
+      return total;
+    }
+
+    function renderCartBar(){
+      var bar = document.getElementById('cartBar');
+      var count = cartCount();
+      if(count > 0){
+        bar.classList.add('show');
+      } else {
+        bar.classList.remove('show');
+      }
+      document.getElementById('cartBarCount').textContent = toPersianNumber(count);
+      document.getElementById('cartBarTotal').textContent = formatToman(cartTotal());
+    }
+
+    function renderCartList(){
+      var list = document.getElementById('cartList');
+      var ids = Object.keys(cart);
+      if(ids.length === 0){
+        list.innerHTML = '<div class="cart-empty">سبد خرید شما خالیه 🧺</div>';
+      } else {
+        var html = '';
+        ids.forEach(function(id){
+          var it = cart[id];
+          html +=
+            '<div class="cart-row">' +
+              '<div>' +
+                '<div class="cart-row-name">' + it.name + '</div>' +
+                '<div class="cart-row-sub">' + weightLabel(it.qty) + '</div>' +
+              '</div>' +
+              '<div class="cart-row-right">' +
+                '<span class="cart-row-price">' + formatToman(it.qty * it.price) + '</span>' +
+                '<button class="cart-remove" onclick="removeCartItem(\'' + id + '\')">حذف</button>' +
+              '</div>' +
+            '</div>';
+        });
+        list.innerHTML = html;
+      }
+      document.getElementById('cartTotalVal').textContent = formatToman(cartTotal());
+      var goBtn = document.getElementById('goCheckoutBtn');
+      goBtn.disabled = ids.length === 0;
+    }
+
+    function removeCartItem(id){
+      delete cart[id];
+      var itemEl = document.querySelector('.item[data-id="' + id + '"]');
+      if(itemEl) renderItemControl(itemEl);
+      renderCartBar();
+      renderCartList();
+    }
+
+    /* ---------------- Cart sheet ---------------- */
+    function openCartSheet(){
+      renderCartList();
+      document.getElementById('cartOverlay').classList.add('open');
+      document.getElementById('cartSheet').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCartSheet(){
+      document.getElementById('cartOverlay').classList.remove('open');
+      document.getElementById('cartSheet').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ---------------- Checkout sheet ---------------- */
+    function openCheckoutSheet(){
+      if(cartCount() === 0) return;
+      document.getElementById('checkoutTotalVal').textContent = formatToman(cartTotal());
+      closeCartSheet();
+      document.getElementById('checkoutOverlay').classList.add('open');
+      document.getElementById('checkoutSheet').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeCheckoutSheet(){
+      document.getElementById('checkoutOverlay').classList.remove('open');
+      document.getElementById('checkoutSheet').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ---------------- Success sheet ---------------- */
+    function openSuccessSheet(){
+      document.getElementById('successOverlay').classList.add('open');
+      document.getElementById('successSheet').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSuccessSheet(){
+      document.getElementById('successOverlay').classList.remove('open');
+      document.getElementById('successSheet').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ---------------- Toast ---------------- */
+    var toastTimer = null;
+    function showToast(msg){
+      var toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 3500);
+    }
+
+    /* ---------------- Validation ---------------- */
+    function validatePhone(phone){
+      return /^09[0-9]{9}$/.test(phone);
+    }
+
+    /* ---------------- Submit order ---------------- */
+    function submitOrder(){
+      var nameInput = document.getElementById('customerName');
+      var phoneInput = document.getElementById('customerPhone');
+      var nameField = document.getElementById('nameField');
+      var phoneField = document.getElementById('phoneField');
+
+      var name = nameInput.value.trim();
+      var phone = phoneInput.value.trim();
+
+      var valid = true;
+      if(name.length < 3){
+        nameField.classList.add('invalid');
+        valid = false;
+      } else {
+        nameField.classList.remove('invalid');
+      }
+
+      if(!validatePhone(phone)){
+        phoneField.classList.add('invalid');
+        valid = false;
+      } else {
+        phoneField.classList.remove('invalid');
+      }
+
+      if(!valid) return;
+
+      if(cartCount() === 0){
+        showToast('سبد خرید شما خالیه');
+        return;
+      }
+
+      var btn = document.getElementById('submitOrderBtn');
+      btn.disabled = true;
+      btn.textContent = 'در حال ارسال...';
+
+      var lines = [];
+      lines.push('🧾 سفارش جدید ژامبیست');
+      lines.push('');
+      lines.push('👤 نام: ' + name);
+      lines.push('📱 شماره: ' + phone);
+      lines.push('');
+      lines.push('🛒 اقلام سفارش:');
+      Object.keys(cart).forEach(function(id){
+        var it = cart[id];
+        lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(it.qty * it.price));
+      });
+      lines.push('');
+      lines.push('💰 جمع کل: ' + formatToman(cartTotal()));
+
+      var text = lines.join('\n');
+
+      fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(data){
+        btn.disabled = false;
+        btn.textContent = 'ثبت نهایی سفارش 📮';
+        if(data.ok){
+          cart = {};
+          document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
+          renderCartBar();
+          nameInput.value = '';
+          phoneInput.value = '';
+          closeCheckoutSheet();
+          openSuccessSheet();
+        } else {
+          showToast('ثبت سفارش با خطا مواجه شد، دوباره تلاش کنید');
+        }
+      })
+      .catch(function(){
+        btn.disabled = false;
+        btn.textContent = 'ثبت نهایی سفارش 📮';
+        showToast('مشکل در اتصال. اتصال اینترنت رو چک کنید');
+      });
     }
   </script>
 
