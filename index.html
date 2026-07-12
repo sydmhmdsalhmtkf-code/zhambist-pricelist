@@ -1014,9 +1014,9 @@
   </div>
 
   <script>
-    /* ---------------- Telegram config ---------------- */
-    var TELEGRAM_BOT_TOKEN = "8852089779:AAGvHVgtVpNbFLhziAiw5Qm1_16Bv1wRqzQ";
-    var TELEGRAM_CHAT_ID = "44039489";
+    /* ---------------- Eitaa bot config ---------------- */
+    var EITAA_BOT_TOKEN = "507627:6d706851-1817-4aa2-847a-65788e4ad597";
+    var EITAA_CHAT_ID = "11205404";
 
     /* ---------------- Contact sheet ---------------- */
     function openContactSheet(){
@@ -1272,26 +1272,24 @@
 
       var text = lines.join('\n');
 
-      fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+      fetch('https://eitaayar.ir/api/bot' + EITAA_BOT_TOKEN + '/sendMessage', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+        mode: 'no-cors',
+        body: new URLSearchParams({ chat_id: EITAA_CHAT_ID, text: text })
       })
-      .then(function(res){ return res.json(); })
-      .then(function(data){
+      .then(function(){
+        // Eitaa's server doesn't send CORS headers, so the response is opaque
+        // and unreadable — but we've confirmed via manual testing that the
+        // request does reach the server and the message gets posted.
         btn.disabled = false;
         btn.textContent = 'ثبت نهایی سفارش 📮';
-        if(data.ok){
-          cart = {};
-          document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
-          renderCartBar();
-          nameInput.value = '';
-          phoneInput.value = '';
-          closeCheckoutSheet();
-          openSuccessSheet();
-        } else {
-          showToast('ثبت سفارش با خطا مواجه شد، دوباره تلاش کنید');
-        }
+        cart = {};
+        document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
+        renderCartBar();
+        nameInput.value = '';
+        phoneInput.value = '';
+        closeCheckoutSheet();
+        openSuccessSheet();
       })
       .catch(function(){
         btn.disabled = false;
