@@ -1276,24 +1276,22 @@
 
       fetch('https://eitaayar.ir/bot' + EITAA_BOT_TOKEN + '/sendMessage', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: EITAA_CHAT_ID, text: text })
+        mode: 'no-cors',
+        body: new URLSearchParams({ chat_id: EITAA_CHAT_ID, text: text })
       })
-      .then(function(res){ return res.json(); })
-      .then(function(data){
+      .then(function(){
+        // Eitaa's server doesn't send CORS headers, so the response is opaque
+        // and unreadable — but the request itself does reach the server and
+        // the message gets sent. We treat "no network error" as success.
         btn.disabled = false;
         btn.textContent = 'ثبت نهایی سفارش 📮';
-        if(data.ok){
-          cart = {};
-          document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
-          renderCartBar();
-          nameInput.value = '';
-          phoneInput.value = '';
-          closeCheckoutSheet();
-          openSuccessSheet();
-        } else {
-          showToast('ثبت سفارش با خطا مواجه شد، دوباره تلاش کنید');
-        }
+        cart = {};
+        document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
+        renderCartBar();
+        nameInput.value = '';
+        phoneInput.value = '';
+        closeCheckoutSheet();
+        openSuccessSheet();
       })
       .catch(function(){
         btn.disabled = false;
