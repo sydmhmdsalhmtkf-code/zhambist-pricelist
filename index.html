@@ -1016,9 +1016,9 @@
   </div>
 
   <script>
-    /* ---------------- Eitaa bot config ---------------- */
-    var EITAA_BOT_TOKEN = "507627:b38ec383-5b79-4070-a512-da343ed72c48";
-    var EITAA_CHAT_ID = "43262005";
+    /* ---------------- Telegram config ---------------- */
+    var TELEGRAM_BOT_TOKEN = "8852089779:AAGvHVgtVpNbFLhziAiw5Qm1_16Bv1wRqzQ";
+    var TELEGRAM_CHAT_ID = "44039489";
 
     /* ---------------- Contact sheet ---------------- */
     function openContactSheet(){
@@ -1274,24 +1274,26 @@
 
       var text = lines.join('\n');
 
-      fetch('https://eitaayar.ir/bot' + EITAA_BOT_TOKEN + '/sendMessage', {
+      fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
         method: 'POST',
-        mode: 'no-cors',
-        body: new URLSearchParams({ chat_id: EITAA_CHAT_ID, text: text })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
       })
-      .then(function(){
-        // Eitaa's server doesn't send CORS headers, so the response is opaque
-        // and unreadable — but the request itself does reach the server and
-        // the message gets sent. We treat "no network error" as success.
+      .then(function(res){ return res.json(); })
+      .then(function(data){
         btn.disabled = false;
         btn.textContent = 'ثبت نهایی سفارش 📮';
-        cart = {};
-        document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
-        renderCartBar();
-        nameInput.value = '';
-        phoneInput.value = '';
-        closeCheckoutSheet();
-        openSuccessSheet();
+        if(data.ok){
+          cart = {};
+          document.querySelectorAll('.item[data-price]').forEach(function(el){ renderItemControl(el); });
+          renderCartBar();
+          nameInput.value = '';
+          phoneInput.value = '';
+          closeCheckoutSheet();
+          openSuccessSheet();
+        } else {
+          showToast('ثبت سفارش با خطا مواجه شد، دوباره تلاش کنید');
+        }
       })
       .catch(function(){
         btn.disabled = false;
