@@ -1016,9 +1016,9 @@
   </div>
 
   <script>
-    /* ---------------- Telegram config ---------------- */
-    var TELEGRAM_BOT_TOKEN = "8852089779:AAGvHVgtVpNbFLhziAiw5Qm1_16Bv1wRqzQ";
-    var TELEGRAM_CHAT_ID = "44039489";
+    /* ---------------- Eitaa bot config ---------------- */
+    var EITAA_BOT_TOKEN = "507627:b38ec383-5b79-4070-a512-da343ed72c48";
+    var EITAA_CHAT_ID = "43262005";
 
     /* ---------------- Contact sheet ---------------- */
     function openContactSheet(){
@@ -1274,10 +1274,10 @@
 
       var text = lines.join('\n');
 
-      fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+      fetch('https://eitaayar.ir/bot' + EITAA_BOT_TOKEN + '/sendMessage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text })
+        body: JSON.stringify({ chat_id: EITAA_CHAT_ID, text: text })
       })
       .then(function(res){ return res.json(); })
       .then(function(data){
