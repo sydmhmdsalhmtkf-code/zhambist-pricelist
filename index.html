@@ -754,6 +754,30 @@
     .item-price{font-size:0.95rem;}
     .cat-title{font-size:1.15rem;}
   }
+
+  /* ---------------- Entrance animations ---------------- */
+  @keyframes fadeSlideUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeScaleIn{
+    from{ opacity:0; transform:scale(0.85); }
+    to{ opacity:1; transform:scale(1); }
+  }
+
+  .anim-in{ opacity:0; }
+  .flame-mark.anim-in{ animation:fadeScaleIn 0.7s ease forwards; animation-delay:0.05s; }
+  .brand.anim-in{ animation:fadeSlideUp 0.7s ease forwards; animation-delay:0.18s; }
+  .brand-sub.anim-in{ animation:fadeSlideUp 0.7s ease forwards; animation-delay:0.30s; }
+  .hero-line.anim-in{ animation:fadeSlideUp 0.7s ease forwards; animation-delay:0.42s; }
+  .hero-note.anim-in{ animation:fadeSlideUp 0.7s ease forwards; animation-delay:0.54s; }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    .anim-in, .reveal{ animation:none !important; opacity:1 !important; transform:none !important; transition:none !important; }
+  }
 </style>
 </head>
 <body>
@@ -762,7 +786,7 @@
 
   <section class="hero">
     <div class="ember-glow"></div>
-    <div class="flame-mark">
+    <div class="flame-mark anim-in">
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M32 4C32 4 20 18 20 30C20 38 25 44 32 44C39 44 44 38 44 30C44 22 38 18 38 14C38 20 34 22 32 26C30 22 28 18 32 4Z" fill="url(#g1)"/>
         <defs>
@@ -774,15 +798,15 @@
         </defs>
       </svg>
     </div>
-    <h1 class="brand">ZHAMBIST</h1>
-    <div class="brand-sub">PREMIUM PRODUCTS</div>
-    <p class="hero-line">لیست قیمت محصولات سالم و لذیذ ژامبیست، تازه و با کیفیت، برای سفره‌ی شما 🌿</p>
-    <div class="hero-note">⚖️ قیمت‌ها برای نیم کیلو محاسبه شده است</div>
+    <h1 class="brand anim-in">ZHAMBIST</h1>
+    <div class="brand-sub anim-in">PREMIUM PRODUCTS</div>
+    <p class="hero-line anim-in">لیست قیمت محصولات سالم و لذیذ ژامبیست، تازه و با کیفیت، برای سفره‌ی شما 🌿</p>
+    <div class="hero-note anim-in">⚖️ قیمت‌ها برای نیم کیلو محاسبه شده است</div>
   </section>
 
   <main class="menu">
 
-    <div class="category">
+    <div class="category reveal">
       <div class="cat-head">
         <div class="cat-icon">🥩</div>
         <div class="cat-title">محصولات گوشتی</div>
@@ -806,7 +830,7 @@
       </div>
     </div>
 
-    <div class="category">
+    <div class="category reveal">
       <div class="cat-head">
         <div class="cat-icon">🍗</div>
         <div class="cat-title">مرغ و بوقلمون</div>
@@ -837,7 +861,7 @@
       </div>
     </div>
 
-    <div class="category">
+    <div class="category reveal">
       <div class="cat-head">
         <div class="cat-icon">🌭</div>
         <div class="cat-title">سوسیس و هات‌داگ</div>
@@ -893,7 +917,7 @@
       </div>
     </div>
 
-    <div class="category">
+    <div class="category reveal">
       <div class="cat-head">
         <div class="cat-icon">🔥</div>
         <div class="cat-title">سایر خوشمزه‌ها</div>
@@ -1055,6 +1079,23 @@
       items.forEach(function(el, idx){
         el.dataset.id = 'p' + idx;
       });
+
+      // Reveal-on-scroll for category sections
+      var revealEls = document.querySelectorAll('.reveal');
+      if('IntersectionObserver' in window){
+        var observer = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if(entry.isIntersecting){
+              entry.target.classList.add('in-view');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(function(el){ observer.observe(el); });
+      } else {
+        // Fallback: just show everything if IntersectionObserver isn't supported
+        revealEls.forEach(function(el){ el.classList.add('in-view'); });
+      }
     });
 
     function addItem(btn){
