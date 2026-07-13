@@ -224,6 +224,51 @@
     color:var(--smoke);
   }
 
+  .sale-banner{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:14px;
+    padding:9px 20px;
+    border-radius:999px;
+    font-size:0.82rem;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(135deg, var(--flame), var(--flame-deep));
+    box-shadow:0 6px 20px rgba(182,55,26,0.35);
+    position:relative;
+    z-index:2;
+  }
+
+  .item-price.has-sale{
+    gap:6px;
+  }
+
+  .item-price .original-price{
+    font-size:0.78rem;
+    font-weight:500;
+    color:var(--smoke);
+    text-decoration:line-through;
+  }
+
+  .item-price .sale-price{
+    color:var(--flame);
+  }
+
+  .discount-badge{
+    display:inline-flex;
+    align-items:center;
+    font-size:0.6rem;
+    color:#fff;
+    background:linear-gradient(135deg, var(--flame), var(--flame-deep));
+    padding:2px 7px;
+    border-radius:999px;
+    font-weight:700;
+    margin-inline-end:6px;
+    letter-spacing:0.3px;
+    white-space:nowrap;
+  }
+
   .item-price.premium{
     position:relative;
     padding-bottom:5px;
@@ -832,6 +877,7 @@
     <div class="brand-sub anim-in">PREMIUM PRODUCTS</div>
     <p class="hero-line anim-in">لیست قیمت محصولات سالم و لذیذ ژامبیست، تازه و با کیفیت، برای سفره‌ی شما 🌿</p>
     <div class="hero-note anim-in">⚖️ قیمت‌ها برای نیم کیلو محاسبه شده است</div>
+    <div class="sale-banner" id="saleBanner" style="display:none;"></div>
   </section>
 
   <main class="menu">
@@ -1125,6 +1171,41 @@
           }
         }
       });
+
+      // Limited-time 12% discount (12 days from launch)
+      var SALE_PERCENT = 12;
+      var SALE_END = new Date('2026-07-26T23:59:59+03:30');
+      var now = new Date();
+
+      if(now < SALE_END){
+        var banner = document.getElementById('saleBanner');
+        var daysLeft = Math.max(1, Math.ceil((SALE_END - now) / 86400000));
+        banner.textContent = '🔥 ' + toPersianNumber(SALE_PERCENT) + '٪ تخفیف ویژه — ' + toPersianNumber(daysLeft) + ' روز دیگر باقی مانده';
+        banner.style.display = 'inline-flex';
+
+        items.forEach(function(el){
+          var original = parseInt(el.dataset.price, 10);
+          var discounted = Math.round(original * (1 - SALE_PERCENT / 100) / 10) * 10;
+          el.dataset.originalPrice = original;
+          el.dataset.price = discounted; // cart & order totals now use the discounted price
+
+          var priceEl = el.querySelector('.item-price');
+          if(priceEl){
+            var smallEl = priceEl.querySelector('small');
+            var unitHtml = smallEl ? smallEl.outerHTML : '<small>تومان</small>';
+            priceEl.classList.add('has-sale');
+            priceEl.innerHTML =
+              '<span class="original-price">' + toPersianNumber(original) + '</span>' +
+              '<span class="sale-price">' + toPersianNumber(discounted) + '</span>' +
+              unitHtml;
+
+            var discountBadge = document.createElement('span');
+            discountBadge.className = 'discount-badge';
+            discountBadge.textContent = '٪' + toPersianNumber(SALE_PERCENT) + ' تخفیف';
+            priceEl.parentNode.insertBefore(discountBadge, priceEl);
+          }
+        });
+      }
 
       // Reveal-on-scroll for category sections
       var revealEls = document.querySelectorAll('.reveal');
