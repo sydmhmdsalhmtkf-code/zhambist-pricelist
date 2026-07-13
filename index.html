@@ -224,6 +224,36 @@
     color:var(--smoke);
   }
 
+  .item-price.premium{
+    position:relative;
+    padding-bottom:5px;
+  }
+
+  .item-price.premium::after{
+    content:'';
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--gold-bright), var(--gold), transparent);
+    border-radius:2px;
+  }
+
+  .premium-badge{
+    display:inline-flex;
+    align-items:center;
+    font-size:0.6rem;
+    color:var(--flame-deep);
+    background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+    padding:2px 7px;
+    border-radius:999px;
+    font-weight:700;
+    margin-inline-end:6px;
+    letter-spacing:0.3px;
+    white-space:nowrap;
+  }
+
   .qty-box{display:flex; align-items:center; justify-content:flex-end;}
 
   .add-btn{
@@ -1078,6 +1108,22 @@
       var items = document.querySelectorAll('.item[data-price]');
       items.forEach(function(el, idx){
         el.dataset.id = 'p' + idx;
+      });
+
+      // Premium branding: mark the highest-priced items with a gold underline + badge
+      var PREMIUM_THRESHOLD = 700;
+      items.forEach(function(el){
+        var price = parseInt(el.dataset.price, 10);
+        if(price >= PREMIUM_THRESHOLD){
+          var priceEl = el.querySelector('.item-price');
+          if(priceEl){
+            priceEl.classList.add('premium');
+            var badge = document.createElement('span');
+            badge.className = 'premium-badge';
+            badge.textContent = 'ویژه';
+            priceEl.parentNode.insertBefore(badge, priceEl);
+          }
+        }
       });
 
       // Reveal-on-scroll for category sections
