@@ -1413,12 +1413,7 @@
       Object.keys(cart).forEach(function(id){
         var it = cart[id];
         var itemTotal = it.qty * it.price;
-        var itemOriginalTotal = it.qty * it.originalPrice;
-        if(itemOriginalTotal !== itemTotal){
-          lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(itemOriginalTotal) + ' ← ' + formatToman(itemTotal));
-        } else {
-          lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(itemTotal));
-        }
+        lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(itemTotal));
       });
       lines.push('');
       var grandTotal = cartTotal();
