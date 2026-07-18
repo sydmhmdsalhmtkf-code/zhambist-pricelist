@@ -1412,10 +1412,23 @@
       lines.push('🛒 اقلام سفارش:');
       Object.keys(cart).forEach(function(id){
         var it = cart[id];
-        lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(it.qty * it.price));
+        var itemTotal = it.qty * it.price;
+        var itemOriginalTotal = it.qty * it.originalPrice;
+        if(itemOriginalTotal !== itemTotal){
+          lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(itemOriginalTotal) + ' ← ' + formatToman(itemTotal));
+        } else {
+          lines.push('• ' + it.name + ' — ' + weightLabel(it.qty) + ' — ' + formatToman(itemTotal));
+        }
       });
       lines.push('');
-      lines.push('💰 جمع کل: ' + formatToman(cartTotal()));
+      var grandTotal = cartTotal();
+      var grandOriginalTotal = cartOriginalTotal();
+      if(grandOriginalTotal !== grandTotal){
+        lines.push('💰 جمع کل قبل از تخفیف: ' + formatToman(grandOriginalTotal));
+        lines.push('🎉 جمع کل با تخفیف: ' + formatToman(grandTotal));
+      } else {
+        lines.push('💰 جمع کل: ' + formatToman(grandTotal));
+      }
 
       var text = lines.join('\n');
 
