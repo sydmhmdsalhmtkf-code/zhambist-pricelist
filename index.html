@@ -1038,7 +1038,10 @@
     <div class="cart-list" id="cartList"></div>
     <div class="cart-total-row">
       <span class="cart-total-label">جمع کل</span>
-      <span class="cart-total-val" id="cartTotalVal">۰ تومان</span>
+      <span style="display:flex; align-items:baseline; gap:8px;">
+        <span id="cartOriginalTotalVal" style="display:none; font-size:0.85rem; color:var(--smoke); text-decoration:line-through;"></span>
+        <span class="cart-total-val" id="cartTotalVal">۰ تومان</span>
+      </span>
     </div>
     <button type="button" class="primary-btn" id="goCheckoutBtn" onclick="openCheckoutSheet()">تکمیل سفارش ←</button>
     <button type="button" class="sheet-close" onclick="closeCartSheet()">بستن ✕</button>
@@ -1053,7 +1056,10 @@
 
     <div class="checkout-summary">
       <span>مبلغ قابل پرداخت</span>
-      <strong id="checkoutTotalVal">۰ تومان</strong>
+      <span style="display:flex; align-items:baseline; gap:8px;">
+        <span id="checkoutOriginalTotalVal" style="display:none; font-size:0.8rem; color:var(--smoke); text-decoration:line-through;"></span>
+        <strong id="checkoutTotalVal">۰ تومان</strong>
+      </span>
     </div>
 
     <div class="field" id="nameField">
@@ -1180,8 +1186,9 @@
       var id = itemEl.dataset.id;
       var name = itemEl.dataset.name;
       var price = parseInt(itemEl.dataset.price, 10);
+      var originalPrice = itemEl.dataset.originalPrice ? parseInt(itemEl.dataset.originalPrice, 10) : price;
 
-      cart[id] = { name: name, price: price, qty: 1 };
+      cart[id] = { name: name, price: price, originalPrice: originalPrice, qty: 1 };
       renderItemControl(itemEl);
       renderCartBar();
     }
@@ -1235,6 +1242,12 @@
       return total;
     }
 
+    function cartOriginalTotal(){
+      var total = 0;
+      for(var id in cart){ total += cart[id].qty * cart[id].originalPrice; }
+      return total;
+    }
+
     function renderCartBar(){
       var bar = document.getElementById('cartBar');
       var count = cartCount();
@@ -1271,6 +1284,14 @@
         list.innerHTML = html;
       }
       document.getElementById('cartTotalVal').textContent = formatToman(cartTotal());
+      var origTotalEl = document.getElementById('cartOriginalTotalVal');
+      var origTotal = cartOriginalTotal();
+      if(origTotal !== cartTotal()){
+        origTotalEl.textContent = formatToman(origTotal);
+        origTotalEl.style.display = 'inline';
+      } else {
+        origTotalEl.style.display = 'none';
+      }
       var goBtn = document.getElementById('goCheckoutBtn');
       goBtn.disabled = ids.length === 0;
     }
@@ -1300,6 +1321,14 @@
     function openCheckoutSheet(){
       if(cartCount() === 0) return;
       document.getElementById('checkoutTotalVal').textContent = formatToman(cartTotal());
+      var checkoutOrigEl = document.getElementById('checkoutOriginalTotalVal');
+      var origTotal = cartOriginalTotal();
+      if(origTotal !== cartTotal()){
+        checkoutOrigEl.textContent = formatToman(origTotal);
+        checkoutOrigEl.style.display = 'inline';
+      } else {
+        checkoutOrigEl.style.display = 'none';
+      }
       closeCartSheet();
       document.getElementById('checkoutOverlay').classList.add('open');
       document.getElementById('checkoutSheet').classList.add('open');
