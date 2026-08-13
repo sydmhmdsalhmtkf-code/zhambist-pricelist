@@ -319,6 +319,20 @@
     margin:-6px 0 30px;
   }
 
+  .prep-note{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+    padding:10px 16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(224,168,62,0.06);
+    color:var(--gold);
+    font-size:0.82rem;
+    line-height:1.7;
+  }
+
   /* ---------- CTA footer ---------- */
   .cta{
     max-width:640px;
@@ -971,6 +985,31 @@
           <div class="item-main"><span class="item-name">ناگت مرغ و پنیر</span></div>
           <div class="item-side">
             <span class="item-price">۳۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category reveal">
+      <div class="cat-head">
+        <div class="cat-icon">🍕</div>
+        <div class="cat-title">پیتزا نیمه‌آماده</div>
+        <div class="cat-rule"></div>
+      </div>
+      <div class="prep-note">⏳ عزیزان توجه داشته باشید سفارشات پیتزا حداقل تا ۲۴ ساعت دیگه آماده می‌شن</div>
+      <div class="items">
+        <div class="item" data-name="پیتزا مرغ" data-price="380">
+          <div class="item-main"><span class="item-name">پیتزا مرغ</span></div>
+          <div class="item-side">
+            <span class="item-price">۳۸۰<small>تومان</small></span>
+            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
+          </div>
+        </div>
+        <div class="item" data-name="پیتزا مخلوط" data-price="340">
+          <div class="item-main"><span class="item-name">پیتزا مخلوط</span></div>
+          <div class="item-side">
+            <span class="item-price">۳۴۰<small>تومان</small></span>
             <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
           </div>
         </div>
