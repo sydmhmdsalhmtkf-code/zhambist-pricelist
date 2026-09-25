@@ -894,13 +894,6 @@
             <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
           </div>
         </div>
-        <div class="item" data-name="پپرونی" data-price="580">
-          <div class="item-main"><span class="item-name">پپرونی</span></div>
-          <div class="item-side">
-            <span class="item-price">۵۸۰<small>تومان</small></span>
-            <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -998,15 +991,16 @@
         <div class="cat-rule"></div>
       </div>
       <div class="prep-note">⏳ عزیزان توجه داشته باشید برای سفارشات پیتزا حداقل ۴۸ ساعت قبل ثبت سفارش کنید</div>
+      <div class="prep-note">🍕 حداقل تعداد سفارش پیتزا ۴ عدد است</div>
       <div class="items">
-        <div class="item" data-name="پیتزا مرغ" data-price="380">
+        <div class="item" data-name="پیتزا مرغ" data-price="380" data-category="pizza">
           <div class="item-main"><span class="item-name">پیتزا مرغ</span></div>
           <div class="item-side">
             <span class="item-price">۳۸۰<small>تومان</small></span>
             <div class="qty-box"><button class="add-btn" onclick="addItem(this)">+</button></div>
           </div>
         </div>
-        <div class="item" data-name="پیتزا مخلوط" data-price="340">
+        <div class="item" data-name="پیتزا مخلوط" data-price="340" data-category="pizza">
           <div class="item-main"><span class="item-name">پیتزا مخلوط</span></div>
           <div class="item-side">
             <span class="item-price">۳۴۰<small>تومان</small></span>
@@ -1026,6 +1020,10 @@
 
   <div class="channel-link-wrap">
     <a href="https://eitaa.com/zhambist" class="channel-link">📣 عضویت در کانال ژامبیست</a>
+  </div>
+
+  <div class="channel-link-wrap" style="margin-top:12px;">
+    <a href="https://instagram.com/zhambist" class="channel-link" target="_blank" rel="noopener">📸 اینستاگرام ژامبیست</a>
   </div>
 
   <div class="channel-link-wrap" style="margin-top:12px;">
@@ -1226,8 +1224,9 @@
       var name = itemEl.dataset.name;
       var price = parseInt(itemEl.dataset.price, 10);
       var originalPrice = itemEl.dataset.originalPrice ? parseInt(itemEl.dataset.originalPrice, 10) : price;
+      var category = itemEl.dataset.category || null;
 
-      cart[id] = { name: name, price: price, originalPrice: originalPrice, qty: 1 };
+      cart[id] = { name: name, price: price, originalPrice: originalPrice, qty: 1, category: category };
       renderItemControl(itemEl);
       renderCartBar();
     }
@@ -1285,6 +1284,14 @@
       var total = 0;
       for(var id in cart){ total += cart[id].qty * cart[id].originalPrice; }
       return total;
+    }
+
+    function categoryQty(category){
+      var n = 0;
+      for(var id in cart){
+        if(cart[id].category === category){ n += cart[id].qty; }
+      }
+      return n;
     }
 
     function renderCartBar(){
@@ -1435,6 +1442,13 @@
 
       if(cartCount() === 0){
         showToast('سبد خرید شما خالیه');
+        return;
+      }
+
+      var pizzaQty = categoryQty('pizza');
+      var PIZZA_MIN = 4;
+      if(pizzaQty > 0 && pizzaQty < PIZZA_MIN){
+        showToast('حداقل تعداد سفارش پیتزا ' + toPersianNumber(PIZZA_MIN) + ' عدد است');
         return;
       }
 
