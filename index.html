@@ -2,7 +2,9 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0705">
+<noscript><style>.reveal,.anim-in{opacity:1!important;transform:none!important;animation:none!important}</style></noscript>
 <title>ژامبیست | لیست قیمت محصولات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +21,7 @@
     --flame-deep:#b6371a;
     --cream:#f3e7d4;
     --cream-dim:#c9b8a0;
-    --smoke:#8a7360;
+    --smoke:#a08a76;
     --good:#5fb87a;
     --bad:#d8583f;
   }
@@ -181,7 +183,6 @@
 
   .item:last-child{border-bottom:none;}
 
-  .item:hover{background:rgba(229,100,42,0.06);}
 
   .item-main{flex:1; min-width:0;}
 
@@ -269,7 +270,6 @@
     font-family:'Vazirmatn', sans-serif;
   }
 
-  .add-btn:hover{background:rgba(224,168,62,0.18); transform:translateY(-1px);}
 
   .stepper{
     display:flex;
@@ -292,7 +292,6 @@
     font-family:'Vazirmatn', sans-serif;
   }
 
-  .stepper button:hover{background:rgba(224,168,62,0.15);}
 
   .stepper-val{
     min-width:64px;
@@ -411,7 +410,6 @@
     font-family:'Vazirmatn', sans-serif;
   }
 
-  .cta-button:hover{transform:translateY(-2px);}
 
   /* ---------- Contact bottom sheet ---------- */
   .sheet-overlay{
@@ -485,10 +483,6 @@
     transition:background 0.2s ease, transform 0.2s ease;
   }
 
-  .contact-row:hover{
-    background:rgba(224,168,62,0.1);
-    transform:translateY(-1px);
-  }
 
   .contact-label{
     display:flex;
@@ -549,10 +543,6 @@
     transition:transform 0.2s ease, background 0.2s ease;
   }
 
-  .channel-link:hover{
-    transform:translateY(-2px);
-    background:linear-gradient(135deg, rgba(224,168,62,0.28), rgba(224,168,62,0.1));
-  }
 
   footer{
     text-align:center;
@@ -704,7 +694,6 @@
   }
 
   .primary-btn:disabled{opacity:0.55; cursor:not-allowed;}
-  .primary-btn:not(:disabled):hover{transform:translateY(-1px);}
 
   .ghost-btn{
     display:block;
@@ -853,6 +842,114 @@
   @media (prefers-reduced-motion: reduce){
     .anim-in, .reveal{ animation:none !important; opacity:1 !important; transform:none !important; transition:none !important; }
   }
+
+  /* =====================================================================
+     Polish layer — motion tokens, touch/mobile fixes, accessibility.
+     Principles: strong ease-out for UI, UI motion < 300ms, press feedback
+     on :active, hover only where hover exists, 16px inputs, safe areas.
+     ===================================================================== */
+  :root{
+    --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-drawer:cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  html{
+    -webkit-tap-highlight-color:transparent;
+    -webkit-text-size-adjust:100%;
+  }
+  body{ min-height:100vh; min-height:100dvh; }
+
+  /* Taps: no 300ms delay; controls are not text-selectable on long-press */
+  button, a, [role="button"]{ touch-action:manipulation; }
+  button, [role="button"]{
+    -webkit-user-select:none; user-select:none; -webkit-touch-callout:none;
+  }
+
+  /* iOS zooms into any input under 16px and never zooms back out */
+  .field input{ font-size:16px; }
+
+  /* Keyboard users get a visible focus ring in the brand gold */
+  :focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+  .field input:focus-visible{ outline:none; }
+
+  /* Press feedback: instant on touch, ease-out, 100-160ms */
+  .add-btn, .stepper button, .primary-btn, .ghost-btn, .cta-button,
+  .channel-link, .contact-row, .sheet-close{
+    transition:transform 120ms var(--ease-out), background-color 160ms ease-out,
+               background 160ms ease-out, opacity 160ms ease-out;
+  }
+  .add-btn{ position:relative; }
+  .add-btn::before{ content:''; position:absolute; inset:-6px; }
+  .stepper button{ width:36px; }
+  .add-btn:active, .primary-btn:not(:disabled):active, .ghost-btn:active,
+  .cta-button:active, .channel-link:active, .contact-row:active{
+    transform:scale(0.97);
+  }
+  .stepper button:active{ background:rgba(224,168,62,0.22); }
+  .cart-bar.show:active{ transform:translateY(0) scale(0.985); }
+  .cart-remove{ padding:8px 6px; }
+
+  /* Hover only where a real pointer exists (touch fakes a sticky :hover) */
+  @media (hover:hover) and (pointer:fine){
+    .item:hover{ background:rgba(229,100,42,0.06); }
+    .add-btn:hover{ background:rgba(224,168,62,0.18); transform:translateY(-1px); }
+    .add-btn:hover:active{ transform:scale(0.97); }
+    .stepper button:hover{ background:rgba(224,168,62,0.15); }
+    .cta-button:hover{ transform:translateY(-2px); }
+    .contact-row:hover{ background:rgba(224,168,62,0.1); transform:translateY(-1px); }
+    .channel-link:hover{
+      transform:translateY(-2px);
+      background:linear-gradient(135deg, rgba(224,168,62,0.28), rgba(224,168,62,0.1));
+    }
+    .primary-btn:not(:disabled):hover{ transform:translateY(-1px); }
+  }
+
+  /* Surfaces that slide in: strong ease-out; drawer curve for sheets */
+  .sheet-overlay{ transition:opacity 200ms ease-out; }
+  .sheet{
+    transition:transform 320ms var(--ease-drawer), visibility 0s linear 320ms;
+    max-height:88vh; max-height:88dvh;
+    padding-bottom:calc(30px + env(safe-area-inset-bottom, 0px));
+    overscroll-behavior:contain;
+    visibility:hidden;
+  }
+  .sheet.open{ visibility:visible; transition-delay:0s; }
+  .cart-bar{
+    bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+    transition:transform 280ms var(--ease-out), visibility 0s linear 280ms;
+    visibility:hidden;
+  }
+  .cart-bar.show{ visibility:visible; transition-delay:0s; }
+  .toast{ transition:opacity 200ms ease-out, transform 200ms var(--ease-out); }
+
+  /* Entrance + scroll reveal: same motion, stronger curve, shorter travel */
+  .flame-mark.anim-in, .brand.anim-in, .brand-sub.anim-in,
+  .hero-line.anim-in, .hero-note.anim-in{ animation-timing-function:var(--ease-out); }
+  .reveal{
+    transform:translateY(20px);
+    transition:opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  }
+  .reveal.in-view{ transform:translateY(0); }
+
+  /* Readability: nothing meaningful below ~11px */
+  .item-price small{ font-size:0.72rem; }
+  .stepper-val small{ font-size:0.68rem; }
+  .item-tag{ font-size:0.8rem; }
+  .brand-sub{ font-size:0.78rem; }
+  .hero-note{ font-size:0.85rem; }
+  .prep-note{ font-size:0.88rem; }
+  .field-error{ font-size:0.8rem; }
+  .cart-row-sub, .cart-remove{ font-size:0.82rem; }
+  .sheet-close{ font-size:0.9rem; }
+
+  /* Reduced motion = fewer and gentler, not zero: keep fades, drop loops and travel */
+  @media (prefers-reduced-motion:reduce){
+    .coming-soon-flame{ animation:none; }
+    .sheet, .cart-bar, .toast{ transition-duration:1ms; }
+    .add-btn:active, .primary-btn:not(:disabled):active, .ghost-btn:active,
+    .cta-button:active, .channel-link:active, .contact-row:active{ transform:none; }
+  }
+
 </style>
 </head>
 <body>
@@ -1085,7 +1182,7 @@
   <footer>ZHAMBIST · PREMIUM PRODUCTS</footer>
 
   <!-- Floating cart bar -->
-  <div class="cart-bar" id="cartBar" onclick="openCartSheet()">
+  <div class="cart-bar" id="cartBar" onclick="openCartSheet()" role="button" tabindex="0" aria-label="مشاهده سبد خرید" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openCartSheet();}">
     <div class="cart-bar-info">
       <span class="cart-bar-count" id="cartBarCount">0</span>
       <span>مشاهده سبد خرید</span>
@@ -1095,7 +1192,7 @@
 
   <!-- Contact sheet -->
   <div class="sheet-overlay" id="sheetOverlay" onclick="closeContactSheet()"></div>
-  <div class="sheet" id="contactSheet">
+  <div class="sheet" id="contactSheet" role="dialog" aria-modal="true" aria-label="راه‌های ارتباطی">
     <div class="sheet-handle"></div>
     <div class="sheet-title">راه‌های ارتباطی</div>
     <p class="sheet-sub">از یکی از راه‌های زیر با ما در ارتباط باشید 👇</p>
@@ -1121,7 +1218,7 @@
 
   <!-- Cart sheet -->
   <div class="sheet-overlay" id="cartOverlay" onclick="closeCartSheet()"></div>
-  <div class="sheet" id="cartSheet">
+  <div class="sheet" id="cartSheet" role="dialog" aria-modal="true" aria-label="سبد خرید">
     <div class="sheet-handle"></div>
     <div class="sheet-title">سبد خرید شما</div>
     <div class="cart-list" id="cartList"></div>
@@ -1138,7 +1235,7 @@
 
   <!-- Checkout sheet -->
   <div class="sheet-overlay" id="checkoutOverlay" onclick="closeCheckoutSheet()"></div>
-  <div class="sheet" id="checkoutSheet">
+  <div class="sheet" id="checkoutSheet" role="dialog" aria-modal="true" aria-label="تکمیل سفارش">
     <div class="sheet-handle"></div>
     <div class="sheet-title">تکمیل سفارش</div>
     <p class="sheet-sub">اطلاعاتتون رو وارد کنید تا سفارش براتون ثبت بشه</p>
@@ -1153,13 +1250,13 @@
 
     <div class="field" id="nameField">
       <label>نام و نام خانوادگی</label>
-      <input type="text" id="customerName" placeholder="مثلاً: علی محمدی">
+      <input type="text" id="customerName" placeholder="مثلاً: علی محمدی" autocomplete="name" enterkeyhint="next">
       <div class="field-error">لطفاً نام و نام خانوادگی رو وارد کنید</div>
     </div>
 
     <div class="field" id="phoneField">
       <label>شماره موبایل</label>
-      <input type="tel" id="customerPhone" placeholder="09xxxxxxxxx" maxlength="11" inputmode="numeric">
+      <input type="tel" id="customerPhone" placeholder="09xxxxxxxxx" maxlength="11" inputmode="numeric" autocomplete="tel" enterkeyhint="done">
       <div class="field-error">شماره موبایل معتبر نیست (مثال: 09123456789)</div>
     </div>
 
@@ -1169,7 +1266,7 @@
 
   <!-- Success sheet -->
   <div class="sheet-overlay" id="successOverlay" onclick="closeSuccessSheet()"></div>
-  <div class="sheet" id="successSheet">
+  <div class="sheet" id="successSheet" role="dialog" aria-modal="true" aria-label="سفارش ثبت شد">
     <div class="sheet-handle"></div>
     <div class="success-wrap">
       <div class="success-icon">✅</div>
@@ -1220,6 +1317,23 @@
       var items = document.querySelectorAll('.item[data-price]');
       items.forEach(function(el, idx){
         el.dataset.id = 'p' + idx;
+        var firstBtn = el.querySelector('.add-btn');
+        if(firstBtn){ firstBtn.setAttribute('aria-label', 'افزودن ' + el.dataset.name + ' به سبد'); }
+      });
+
+      // Persian / Arabic-Indic digits typed on a Persian keyboard -> ASCII, as the user types
+      var phoneField = document.getElementById('customerPhone');
+      if(phoneField){
+        phoneField.addEventListener('input', function(){
+          var fixed = normalizeDigits(phoneField.value);
+          if(fixed !== phoneField.value){ phoneField.value = fixed; }
+        });
+      }
+
+      // Escape closes whichever sheet is open
+      document.addEventListener('keydown', function(e){
+        if(e.key !== 'Escape') return;
+        closeContactSheet(); closeCartSheet(); closeCheckoutSheet(); closeSuccessSheet();
       });
 
       // Limited-time 12% discount (12 days from launch) — no banner, just per-item pricing
@@ -1311,12 +1425,12 @@
         var qty = cart[id].qty;
         box.innerHTML =
           '<div class="stepper">' +
-            '<button onclick="decItemQty(\'' + id + '\')">−</button>' +
+            '<button aria-label="کم کردن ' + cart[id].name + '" onclick="decItemQty(\'' + id + '\')">−</button>' +
             '<span class="stepper-val">' + toPersianNumber(qty) + ' <small>× نیم کیلو</small></span>' +
-            '<button onclick="incItemQty(\'' + id + '\')">+</button>' +
+            '<button aria-label="اضافه کردن ' + cart[id].name + '" onclick="incItemQty(\'' + id + '\')">+</button>' +
           '</div>';
       } else {
-        box.innerHTML = '<button class="add-btn" onclick="addItem(this)">+</button>';
+        box.innerHTML = '<button class="add-btn" aria-label="افزودن ' + itemEl.dataset.name + ' به سبد" onclick="addItem(this)">+</button>';
       }
     }
 
@@ -1461,6 +1575,12 @@
     }
 
     /* ---------------- Validation ---------------- */
+    function normalizeDigits(str){
+      return String(str)
+        .replace(/[\u06F0-\u06F9]/g, function(d){ return String(d.charCodeAt(0) - 0x06F0); })
+        .replace(/[\u0660-\u0669]/g, function(d){ return String(d.charCodeAt(0) - 0x0660); });
+    }
+
     function validatePhone(phone){
       return /^09[0-9]{9}$/.test(phone);
     }
@@ -1473,7 +1593,7 @@
       var phoneField = document.getElementById('phoneField');
 
       var name = nameInput.value.trim();
-      var phone = phoneInput.value.trim();
+      var phone = normalizeDigits(phoneInput.value.trim());
 
       var valid = true;
       if(name.length < 3){
